@@ -6,26 +6,35 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Google.Protobuf;
-
-public delegate void NetworkCallback<in T>(T packet);
+using ServerCore;
 
 public sealed class NetworkManager : MonoBehaviour
 {
-  private const string HOST = "127.0.0.1";
-  private const int PORT = 7777;
-
-  private Queue<Action> queue = new Queue<Action>();
+  ServerSession session = new ServerSession();
+  
+  public void Send(ArraySegment<byte> sendBuff)
+  {
+    this.session.Send(sendBuff);
+  }
 
   private void Start()
   {
-    DontDestroyOnLoad(this);
-    ClientSocket.StartClient(HOST, PORT);
+    var host = Dns.GetHostName();
+    var ipHost = Dns.GetHostEntry(host);
+    var ipAddr = ipHost.AddressList[0];
+    var endPoint = new IPEndPoint(ipAddr, 7777);
+
+    var connector = new Connector();
+
+    connector.Connect(endPoint, () => { return this.session; }, 1);
   }
 
   private void Update()
   {
-    lock (queue)
-      while (queue.Count > 0)
-        queue.Dequeue().Invoke();
+    var list = PacketQueue.Instance.PopAll();
+    foreach (var packet in list)
+    {
+      // PacketManager.Instance.HandlePacket(this.session, packet);
+    }
   }
 }
