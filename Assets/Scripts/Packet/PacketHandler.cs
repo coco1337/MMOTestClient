@@ -14,6 +14,7 @@ public sealed class PacketHandler
   {
     var cs_test = packet as CS_TEST;
     var serverSesion = session as ServerSession;
+    Debug.Log("CS_TEST");
 
     Debug.Log(cs_test.Id);
   }
@@ -23,7 +24,7 @@ public sealed class PacketHandler
     var sc_test = packet as SC_TEST;
     var serverSession = session as ServerSession;
 
-    Debug.Log(sc_test.Id);
+    Debug.Log("SC_TEST : " + sc_test.Id);
   }
 
   public static void CS_LoginHandler(PacketSession session, IMessage packet)

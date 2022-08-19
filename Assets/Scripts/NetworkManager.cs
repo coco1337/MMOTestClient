@@ -6,15 +6,18 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Google.Protobuf;
+using Protocol;
 using ServerCore;
 
 public sealed class NetworkManager : MonoBehaviour
 {
-  ServerSession session = new ServerSession();
+  public static NetworkManager Instance;
+
+  private ServerSession session = new ServerSession();
   
-  public void Send(ArraySegment<byte> sendBuff)
+  public void Send(IMessage packet, MSG_ID msgId)
   {
-    this.session.Send(sendBuff);
+    this.session.Send(packet, msgId);
   }
 
   private void Start()
@@ -22,11 +25,13 @@ public sealed class NetworkManager : MonoBehaviour
     var host = Dns.GetHostName();
     var ipHost = Dns.GetHostEntry(host);
     var ipAddr = ipHost.AddressList[0];
-    var endPoint = new IPEndPoint(ipAddr, 7777);
+    var endPoint = new IPEndPoint(ipAddr, 8888);
 
     var connector = new Connector();
 
     connector.Connect(endPoint, () => { return this.session; }, 1);
+
+    Instance ??= this;
   }
 
   private void Update()
@@ -34,7 +39,16 @@ public sealed class NetworkManager : MonoBehaviour
     var list = PacketQueue.Instance.PopAll();
     foreach (var packet in list)
     {
-      // PacketManager.Instance.HandlePacket(this.session, packet);
+      var handler = PacketManager.Instance.GetPacketHandler(packet.Id);
+      if (handler != null) handler.Invoke(this.session, packet.Message);
     }
+  }
+
+  private IEnumerator CTest()
+  {
+    yield return new WaitForSeconds(5);
+    CS_TEST pkt = new CS_TEST();
+    pkt.Attack = 10;
+    Send(pkt, MSG_ID.PKT_CS_TEST);
   }
 }

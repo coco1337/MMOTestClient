@@ -14,7 +14,7 @@ namespace ServerCore
 
     public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, int count = 1)
     {
-      for (int i = 0;i < count; ++i)
+      for (int i = 0; i < count; ++i)
       {
         var socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         this.sessionFactory = sessionFactory;
@@ -26,6 +26,8 @@ namespace ServerCore
         };
 
         args.Completed += OnConnectCompleted;
+
+        RegisterConnect(args);
       }
     }
 
@@ -45,7 +47,7 @@ namespace ServerCore
         var session = this.sessionFactory.Invoke();
         session.Start(args.ConnectSocket);
         session.OnConnected(args.RemoteEndPoint);
-      } 
+      }
       else
       {
         Console.WriteLine($"OnConnectCompleted failed : {args.SocketError}");

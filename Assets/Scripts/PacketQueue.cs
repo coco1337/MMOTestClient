@@ -5,20 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
 
+public class PacketMessage
+{
+  public ushort Id { get; set; }
+  public IMessage Message { get; set; }
+}
+
 public sealed class PacketQueue
 {
   public static PacketQueue Instance { get; } = new PacketQueue();
 
-  Queue<IMessage> packetQueue = new Queue<IMessage>();
+  Queue<PacketMessage> packetQueue = new Queue<PacketMessage>();
   object _lock = new object();
 
-  public void Push(IMessage packet)
+  public void Push(ushort id, IMessage packet)
   {
-    lock(_lock)
-      this.packetQueue.Enqueue(packet);
+    lock (_lock)
+      this.packetQueue.Enqueue(new PacketMessage() { Id = id, Message = packet });
   }
 
-  public IMessage Pop()
+  public PacketMessage Pop()
   {
     lock (_lock)
     {
@@ -27,9 +33,9 @@ public sealed class PacketQueue
     }
   }
 
-  public List<IMessage> PopAll()
+  public List<PacketMessage> PopAll()
   {
-    var list = new List<IMessage>();
+    var list = new List<PacketMessage>();
 
     lock (_lock)
     {
