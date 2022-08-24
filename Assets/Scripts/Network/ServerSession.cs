@@ -6,7 +6,7 @@ using Google.Protobuf;
 
 public class ServerSession : PacketSession
 {
-  public void Send(IMessage packet, MSG_ID msgId)
+  public void Send(IMessage packet, PacketId msgId)
   {
     string msgName = packet.Descriptor.Name;
     var size = (ushort)packet.CalculateSize();

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using UnityEngine;
 
 namespace ServerCore
 {
@@ -127,7 +128,7 @@ namespace ServerCore
       } 
       catch (Exception e)
       {
-        Console.WriteLine($"RegisterSend failed {e}");
+        Debug.Log($"RegisterSend failed {e}");
       }
     }
 
@@ -148,7 +149,7 @@ namespace ServerCore
           }
           catch (Exception e)
           {
-            Console.WriteLine($"OnSendCompleted failed {e}");
+            Debug.Log($"OnSendCompleted failed {e}");
           }
         }
         else
@@ -173,7 +174,7 @@ namespace ServerCore
       }
       catch (Exception e)
       {
-        Console.WriteLine($"RegisterRecv failed {e}");
+        Debug.Log($"RegisterRecv failed {e}");
       }
     }
 
@@ -206,7 +207,7 @@ namespace ServerCore
         }
         catch (Exception e)
         {
-          Console.WriteLine($"OnRecvCompleted failed {e}");
+          Debug.Log($"OnRecvCompleted failed {e}");
         }
       }
       else

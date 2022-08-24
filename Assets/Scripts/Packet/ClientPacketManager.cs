@@ -4,6 +4,16 @@ using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
 
+public enum PacketId : ushort
+{
+  PKT_CS_REGISTER_REQ = 1000,
+  PKT_SC_REGISTER_RES = 1001,
+  PKT_CS_LOGIN_REQ = 1002,
+  PKT_SC_LOGIN_RES = 1003,
+  PKT_CS_SEND_CHAT_REQ = 1004,
+  PKT_SC_CHAT_NOTI = 1005,
+}
+
 public class PacketManager
 {
   private static PacketManager instance = new PacketManager();
@@ -16,12 +26,12 @@ public class PacketManager
 
   public void Register()
   {
-    onRecv.Add((ushort)1000, MakePacket<SC_TEST>);
-    handler.Add((ushort)1000, PacketHandler.SC_TestHandler);
-    onRecv.Add((ushort)1001, MakePacket<CS_TEST>);
-    handler.Add((ushort)1001, PacketHandler.CS_TestHandler);
-    onRecv.Add((ushort)1002, MakePacket<CS_LOGIN>);
-    handler.Add((ushort)1002, PacketHandler.CS_LoginHandler);
+    onRecv.Add((ushort)PacketId.PKT_SC_REGISTER_RES, MakePacket<SC_REGISTER_RES>);
+    handler.Add((ushort)PacketId.PKT_SC_REGISTER_RES, PacketHandler.SC_RegisterResHandler);
+    onRecv.Add((ushort)PacketId.PKT_SC_LOGIN_RES, MakePacket<SC_LOGIN_RES>);
+    handler.Add((ushort)PacketId.PKT_SC_LOGIN_RES, PacketHandler.SC_LoginResHandler);
+    onRecv.Add((ushort)PacketId.PKT_SC_CHAT_NOTI, MakePacket<SC_CHAT_NOTI>);
+    handler.Add((ushort)PacketId.PKT_SC_CHAT_NOTI, PacketHandler.SC_ChatNotiHandler);
   }
 
   public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
@@ -42,8 +52,9 @@ public class PacketManager
     var pkt = new T();
 
     pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
-    if (handler.TryGetValue(id, out var action))
-      action.Invoke(session, pkt);
+    //if (handler.TryGetValue(id, out var action))
+    //  action.Invoke(session, pkt);
+    PacketQueue.Instance.Push(id, pkt);
   }
 
   public Action<PacketSession, IMessage> GetPacketHandler(ushort id)

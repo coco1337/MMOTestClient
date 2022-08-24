@@ -12,12 +12,20 @@ using ServerCore;
 public sealed class NetworkManager : MonoBehaviour
 {
   public static NetworkManager Instance;
+  public static int Uid { get; private set; }
 
   private ServerSession session = new ServerSession();
+
+  public void SetUid(int uid) => Uid = uid;
   
-  public void Send(IMessage packet, MSG_ID msgId)
+  public void Send(IMessage packet, PacketId msgId)
   {
     this.session.Send(packet, msgId);
+  }
+
+  private void Awake()
+  {
+    DontDestroyOnLoad(this);
   }
 
   private void Start()
@@ -44,11 +52,8 @@ public sealed class NetworkManager : MonoBehaviour
     }
   }
 
-  private IEnumerator CTest()
+  private void OnApplicationQuit()
   {
-    yield return new WaitForSeconds(5);
-    CS_TEST pkt = new CS_TEST();
-    pkt.Attack = 10;
-    Send(pkt, MSG_ID.PKT_CS_TEST);
+    session.Disconnect();
   }
 }

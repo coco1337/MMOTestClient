@@ -10,29 +10,25 @@ using UnityEngine;
 
 public sealed class PacketHandler
 {
-  public static void CS_TestHandler(PacketSession session, IMessage packet)
+  public static void SC_RegisterResHandler(PacketSession session, IMessage packet)
   {
-    var cs_test = packet as CS_TEST;
-    var serverSesion = session as ServerSession;
-    Debug.Log("CS_TEST");
+    var res = packet as SC_REGISTER_RES;
 
-    Debug.Log(cs_test.Id);
+    MainSceneUIManager.Instance.HandleMessage(res);
   }
 
-  public static void SC_TestHandler(PacketSession session, IMessage packet)
+  public static void SC_LoginResHandler(PacketSession session, IMessage packet)
   {
-    var sc_test = packet as SC_TEST;
-    var serverSession = session as ServerSession;
+    var res = packet as SC_LOGIN_RES;
 
-    Debug.Log("SC_TEST : " + sc_test.Id);
+    MainSceneUIManager.Instance.HandleMessage(res);
   }
 
-  public static void CS_LoginHandler(PacketSession session, IMessage packet)
+  public static void SC_ChatNotiHandler(PacketSession session, IMessage packet)
   {
-    var cs_login = packet as CS_LOGIN;
-    var serverSession = session as ServerSession;
+    var res = packet as SC_CHAT_NOTI;
 
-    Debug.Log(cs_login.Id);
+    RoomUIManager.Instance.HandleMessage(res);
   }
 }
 
