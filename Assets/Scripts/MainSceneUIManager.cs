@@ -37,9 +37,9 @@ public sealed class MainSceneUIManager : MonoBehaviour
     this.btnRegister.interactable = false;
   }
 
-  public void OnClickRegister()
+  public void OnClickRegister(Debug debug)
   {
-    Debug.Log($"{inputSignUpId.text} :: {inputSignUpPw.text}");
+    Log.Debug($"{inputSignUpId.text} :: {inputSignUpPw.text}");
 
     var pkt = new CS_REGISTER_REQ()
     {
@@ -54,7 +54,7 @@ public sealed class MainSceneUIManager : MonoBehaviour
 
   public void OnClickSignIn()
   {
-    Debug.Log($"{inputSignInId.text} :: {inputSignInPw.text}");
+    Log.Debug($"{inputSignInId.text} :: {inputSignInPw.text}");
 
     var pkt = new CS_LOGIN_REQ()
     {
@@ -97,14 +97,15 @@ public sealed class MainSceneUIManager : MonoBehaviour
   {
     if (res.PacketResult == PacketErrorType.Success)
     {
-      Debug.Log($"REGISTER SUCCESS || ID : {res.Id}, RESULT : {res.PacketResult}");
+      Log.Debug($"REGISTER SUCCESS || ID : {res.Id}, RESULT : {res.PacketResult}");
       this.loadingPanel.CloseLoading();
       this.OnClickSignInBtn();
       this.inputSignInId.text = this.inputSignUpId.text;
       this.inputSignInPw.text = this.inputSignUpPw.text;
-    } 
+    }
     else
     {
+      Log.Debug($"REGISTER ERROR || ");
       this.loadingPanel.ErrorOccured("Register Error");
     }
   }
@@ -113,9 +114,14 @@ public sealed class MainSceneUIManager : MonoBehaviour
   {
     if (res.PacketResult == PacketErrorType.Success)
     {
-      Debug.Log($"LOGIN SUCCESS || ID : {res.Id}, UID : {res.Uid}, RESULT : {res.PacketResult}");
+      Log.Debug($"LOGIN SUCCESS || ID : {res.Id}, UID : {res.Uid}, RESULT : {res.PacketResult}");
       NetworkManager.Instance.SetUid(res.Uid);
       SceneManager.LoadScene(1);
+    }
+    else
+    {
+      Log.Debug($"LOGIN ERROR || ");
+      this.loadingPanel.ErrorOccured("Login failed");
     }
   }
   #endregion
