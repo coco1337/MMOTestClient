@@ -37,7 +37,7 @@ public sealed class MainSceneUIManager : MonoBehaviour
     this.btnRegister.interactable = false;
   }
 
-  public void OnClickRegister(Debug debug)
+  public void OnClickRegister()
   {
     Log.Debug($"{inputSignUpId.text} :: {inputSignUpPw.text}");
 

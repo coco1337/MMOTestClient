@@ -30,5 +30,19 @@ public sealed class PacketHandler
 
     RoomUIManager.Instance.HandleMessage(res);
   }
+
+  public static void SC_SpawnResHandler(PacketSession session, IMessage packet)
+  {
+    var res = packet as SC_SPAWN_RES;
+
+    RoomManager.Instance.HandleMessage(res);
+  }
+
+  public static void SC_SpawnNotiHandler(PacketSession session, IMessage packet)
+  {
+    var noti = packet as SC_SPAWN_NOTI;
+
+    RoomManager.Instance.HandleMessage(noti);
+  }
 }
 

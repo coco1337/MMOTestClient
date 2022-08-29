@@ -12,6 +12,10 @@ public enum PacketId : ushort
   PKT_SC_LOGIN_RES = 1003,
   PKT_CS_SEND_CHAT_REQ = 1004,
   PKT_SC_CHAT_NOTI = 1005,
+  PKT_CS_SPAWN_REQ = 1006,
+  PKT_SC_SPAWN_RES = 1007,
+  PKT_SC_SPAWN_NOTI = 1008,
+  PKT_SC_DESPAWN_NOTI = 1009,
 }
 
 public class PacketManager
@@ -32,6 +36,10 @@ public class PacketManager
     handler.Add((ushort)PacketId.PKT_SC_LOGIN_RES, PacketHandler.SC_LoginResHandler);
     onRecv.Add((ushort)PacketId.PKT_SC_CHAT_NOTI, MakePacket<SC_CHAT_NOTI>);
     handler.Add((ushort)PacketId.PKT_SC_CHAT_NOTI, PacketHandler.SC_ChatNotiHandler);
+    onRecv.Add((ushort)PacketId.PKT_SC_SPAWN_RES, MakePacket<SC_SPAWN_RES>);
+    handler.Add((ushort)PacketId.PKT_SC_SPAWN_RES, PacketHandler.SC_SpawnResHandler);
+    onRecv.Add((ushort)PacketId.PKT_SC_SPAWN_NOTI, MakePacket<SC_SPAWN_NOTI>);
+    handler.Add((ushort)PacketId.PKT_SC_SPAWN_NOTI, PacketHandler.SC_SpawnNotiHandler);
   }
 
   public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
