@@ -12,11 +12,11 @@ using ServerCore;
 public sealed class NetworkManager : MonoBehaviour
 {
   public static NetworkManager Instance;
-  public static int Uid { get; private set; }
+  public static ulong Uid { get; private set; }
 
   private ServerSession session = new ServerSession();
 
-  public void SetUid(int uid) => Uid = uid;
+  public void SetUid(ulong uid) => Uid = uid;
   
   public void Send(IMessage packet, PacketId msgId)
   {

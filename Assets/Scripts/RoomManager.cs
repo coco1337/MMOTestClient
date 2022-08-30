@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using Protocol;
 
 public sealed class RoomManager : MonoBehaviour
@@ -44,7 +45,15 @@ public sealed class RoomManager : MonoBehaviour
   {
     var playerController = Instantiate<PlayerController>(playerPrefab);
     playerController.Init(false, noti.Player.Uid, noti.Player.UserName);
-    playerControllers.Add(playerController);
+    this.playerControllers.Add(playerController);
+  }
+
+  public void HandleMessage(SC_MOVEDATA_NOTI noti)
+  {
+    var playerController = this.playerControllers.FirstOrDefault(e => e.Uid == noti.Uid);
+    if (playerController == null) return;
+
+    playerController.UpdateMoveData(noti.MoveData);
   }
   #endregion
 }

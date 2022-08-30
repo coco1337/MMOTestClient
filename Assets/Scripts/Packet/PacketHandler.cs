@@ -44,5 +44,12 @@ public sealed class PacketHandler
 
     RoomManager.Instance.HandleMessage(noti);
   }
+
+  public static void SC_MovedataNotiHandler(PacketSession session, IMessage packet)
+  {
+    var noti = packet as SC_MOVEDATA_NOTI;
+
+    RoomManager.Instance.HandleMessage(noti);
+  }
 }
 
