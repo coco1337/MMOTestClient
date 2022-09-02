@@ -55,5 +55,14 @@ public sealed class RoomManager : MonoBehaviour
 
     playerController.UpdateMoveData(noti.MoveData);
   }
+
+  public void HandleMessage(SC_DESPAWN_NOTI noti)
+  {
+    var target = this.playerControllers.FirstOrDefault(e => e.Uid == noti.Uid);
+    if (target == null) return;
+
+    this.playerControllers.Remove(target);
+    Destroy(target);
+  }
   #endregion
 }

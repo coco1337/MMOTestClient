@@ -44,6 +44,8 @@ public class PacketManager
     handler.Add((ushort)PacketId.PKT_SC_SPAWN_NOTI, PacketHandler.SC_SpawnNotiHandler);
     onRecv.Add((ushort)PacketId.PKT_SC_MOVEDATA_NOTI, MakePacket<SC_MOVEDATA_NOTI>);
     handler.Add((ushort)PacketId.PKT_SC_MOVEDATA_NOTI, PacketHandler.SC_MovedataNotiHandler);
+    onRecv.Add((ushort)PacketId.PKT_SC_DESPAWN_NOTI, MakePacket<SC_DESPAWN_NOTI>);
+    handler.Add((ushort)PacketId.PKT_SC_DESPAWN_NOTI, PacketHandler.SC_DespawnNotiHandler);
   }
 
   public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

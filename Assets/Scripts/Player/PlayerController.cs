@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public sealed class MoveData
 {
@@ -17,6 +18,9 @@ public sealed class PlayerController : MonoBehaviour
 
   [SerializeField] private MoveData moveData = new();
 
+  [Header("UI")]
+  [SerializeField] private TMP_Text txtUserName;
+
   public ulong Uid => this.uid;
   public MoveData GetMoveData() => this.moveData;
 
@@ -25,6 +29,7 @@ public sealed class PlayerController : MonoBehaviour
     this.isLocal = isLocal;
     this.uid = uid; 
     this.userName = name;
+    this.txtUserName.text = name;
 
     if (this.isLocal) InputManager.Instance.RegisterLocalPlayer(this);
   }
