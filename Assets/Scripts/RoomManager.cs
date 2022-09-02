@@ -37,6 +37,7 @@ public sealed class RoomManager : MonoBehaviour
     {
       var playerController = Instantiate<PlayerController>(playerPrefab);
       playerController.Init(player.Uid == res.MyId, player.Uid, player.UserName);
+      playerController.UpdateMoveData(player.MoveData);
       playerControllers.Add(playerController);
     }
   }
@@ -62,7 +63,7 @@ public sealed class RoomManager : MonoBehaviour
     if (target == null) return;
 
     this.playerControllers.Remove(target);
-    Destroy(target);
+    Destroy(target.gameObject);
   }
   #endregion
 }

@@ -34,6 +34,7 @@ public sealed class PacketHandler
   public static void SC_SpawnResHandler(PacketSession session, IMessage packet)
   {
     var res = packet as SC_SPAWN_RES;
+    Log.Debug("OnSpawnRes");
 
     RoomManager.Instance.HandleMessage(res);
   }
@@ -41,6 +42,7 @@ public sealed class PacketHandler
   public static void SC_SpawnNotiHandler(PacketSession session, IMessage packet)
   {
     var noti = packet as SC_SPAWN_NOTI;
+    Log.Debug($"{noti.Player.Uid} spawn noti");
 
     RoomManager.Instance.HandleMessage(noti);
   }
@@ -48,7 +50,11 @@ public sealed class PacketHandler
   public static void SC_MovedataNotiHandler(PacketSession session, IMessage packet)
   {
     var noti = packet as SC_MOVEDATA_NOTI;
-
+    if (noti == null || RoomManager.Instance == null)
+    {
+      return;
+    }
+    Log.Debug($"{noti.Uid} Move noti");
     RoomManager.Instance.HandleMessage(noti);
   }
 

@@ -39,11 +39,17 @@ public sealed class PlayerController : MonoBehaviour
     TypeHelper.Vec3ToVector3(data.MoveDir, out this.moveData.MoveDir);
     TypeHelper.Vec3ToVector3(data.Position, out this.moveData.Position);
     TypeHelper.Vec3ToVector3(data.Rotation, out this.moveData.Rotation);
+    Move();
   }
 
   public void UpdateMoveData(MoveData data)
   {
     this.moveData = data;
+    Move();
+  }
+
+  public void Move()
+  {
     this.transform.position = this.moveData.Position;
   }
 }
