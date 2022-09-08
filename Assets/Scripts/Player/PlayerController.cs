@@ -18,6 +18,10 @@ public sealed class PlayerController : MonoBehaviour
 
   [SerializeField] private MoveData moveData = new();
 
+  [Header("Camera")]
+  [SerializeField] private Camera playerCamera;
+  [SerializeField] private Transform cameraPos;
+
   [Header("UI")]
   [SerializeField] private TMP_Text txtUserName;
 
@@ -31,7 +35,12 @@ public sealed class PlayerController : MonoBehaviour
     this.userName = name;
     this.txtUserName.text = name;
 
-    if (this.isLocal) InputManager.Instance.RegisterLocalPlayer(this);
+    if (this.isLocal)
+    {
+      InputManager.Instance.RegisterLocalPlayer(this);
+      this.playerCamera = Camera.main;
+      SetCamera();
+    }
   }
 
   public void UpdateMoveData(Protocol.MoveData data)
@@ -39,17 +48,28 @@ public sealed class PlayerController : MonoBehaviour
     TypeHelper.Vec3ToVector3(data.MoveDir, out this.moveData.MoveDir);
     TypeHelper.Vec3ToVector3(data.Position, out this.moveData.Position);
     TypeHelper.Vec3ToVector3(data.Rotation, out this.moveData.Rotation);
-    Move();
+    Apply();
   }
 
   public void UpdateMoveData(MoveData data)
   {
     this.moveData = data;
-    Move();
+    Apply();
   }
 
-  public void Move()
+  private void Apply()
   {
     this.transform.position = this.moveData.Position;
+
+    var rotTemp = this.moveData.Rotation;
+    var rot = Quaternion.Euler(0, rotTemp.y, 0);
+    this.transform.rotation = rot;
+  }
+
+  private void SetCamera()
+  {
+    this.playerCamera.transform.parent = this.cameraPos;
+    this.playerCamera.transform.localPosition = new Vector3(0, 0, 0);
+    this.playerCamera.transform.localRotation = new Quaternion(0, 0, 0, 0);
   }
 }
